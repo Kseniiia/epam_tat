@@ -28,6 +28,14 @@ public class Tests {
                 .waitForLoad();
     }
 
+    @Test
+    public void testSubscribe() {
+        new MainPage(driver)
+                .openPage()
+                .subscribe("abcd1@mail.ru")
+                .waitForSuccessfullSubscriptionPopup();
+    }
+
     @After
     public void stopBrowser() {
         driver.quit();

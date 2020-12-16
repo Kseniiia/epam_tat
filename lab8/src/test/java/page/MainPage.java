@@ -33,6 +33,8 @@ public class MainPage extends AbstractPage {
     @FindBy(xpath = "//div[9]/div/form/button")
     private WebElement subscriptionButton;
 
+    private final By subscriptionPopupLocator = By.xpath("//div[contains(@class, 'add-subscription-form-popup')]");
+
     public MainPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(this.driver, this);
@@ -54,5 +56,17 @@ public class MainPage extends AbstractPage {
         passwordInput.sendKeys(password);
         loginButton.click();
         return new PersonalPage(driver);
+    }
+
+    public MainPage subscribe(String email) {
+        closeCityPopupButton.click();
+        subscriptionEmailInput.sendKeys(email);
+        subscriptionButton.click();
+        return this;
+    }
+
+    public void waitForSuccessfullSubscriptionPopup() {
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
+                .until(ExpectedConditions.visibilityOfElementLocated(subscriptionPopupLocator));
     }
 }
