@@ -53,8 +53,6 @@ public class FunctionalTest {
 
 		Assert.assertEquals(accountFullName.getAttribute("value"), "Мальчикова");
 		Assert.assertEquals(accountEmail.getAttribute("value"), "xenia-2001@mail.ru");
-
-		driver.quit();
 	}
 
 	@After
