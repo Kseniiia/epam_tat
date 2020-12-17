@@ -62,9 +62,9 @@ public class MainPage extends AbstractPage {
         return new PersonalPage(driver);
     }
 
-    public MainPage subscribe(String email) {
+    public MainPage subscribe(User user) {
         closeCityPopupButton.click();
-        subscriptionEmailInput.sendKeys(email);
+        subscriptionEmailInput.sendKeys(user.getEmail());
         subscriptionButton.click();
         return this;
     }

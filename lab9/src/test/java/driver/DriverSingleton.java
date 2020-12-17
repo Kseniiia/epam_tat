@@ -10,11 +10,11 @@ public class DriverSingleton {
     private static WebDriver driver;
 
 
-    private DriverSingleton(){}
+    private DriverSingleton() {}
 
-    public static WebDriver getDriver(){
+    public static WebDriver getDriver() {
         if (null == driver){
-            switch (System.getProperty("browser")){
+            switch (System.getProperty("browser")) {
                 case "firefox": {
                     WebDriverManager.firefoxdriver().setup();
                     driver = new FirefoxDriver();
@@ -29,7 +29,7 @@ public class DriverSingleton {
         return driver;
     }
 
-    public static void closeDriver(){
+    public static void closeDriver() {
         driver.quit();
         driver = null;
     }

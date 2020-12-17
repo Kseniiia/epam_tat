@@ -33,19 +33,21 @@ public class Tests {
 
     @Test
     public void testSubscribe() {
+        User user = UserCreator.withEmail();
         new MainPage(driver)
                 .openPage()
-                .subscribe("abcd@test.com")
+                .subscribe(user)
                 .waitForSuccessfullSubscriptionPopup();
     }
 
     @Test
     public void testRegister() {
+        User user = UserCreator.withFullName();
         new MainPage(driver)
                 .openPage()
                 .redirectToRegistrationPage()
                 .waitForLoad()
-                .register("Ivanov Ivan", "abcd@test.com", "123123q", "123123q")
+                .register(user)
                 .waitForLoad();
     }
 
@@ -53,7 +55,8 @@ public class Tests {
     public void testAddToCart() {
         new CatalogPage(driver)
                 .openPage()
-                .addToCart();
+                .addToCart("1448341")
+                .redirectToCart();
     }
 
     @AfterMethod(alwaysRun = true)

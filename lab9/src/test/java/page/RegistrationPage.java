@@ -1,5 +1,6 @@
 package page;
 
+import model.User;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -35,11 +36,11 @@ public class RegistrationPage extends AbstractPage {
         return this;
     }
 
-    public PersonalPage register(String name, String email, String password, String confirmPassword) {
-        inputName.sendKeys(name);
-        inputEmail.sendKeys(email);
-        inputPassword.sendKeys(password);
-        inputConfirmPassword.sendKeys(confirmPassword);
+    public PersonalPage register(User user) {
+        inputName.sendKeys(user.getFullName());
+        inputEmail.sendKeys(user.getEmail());
+        inputPassword.sendKeys(user.getPassword());
+        inputConfirmPassword.sendKeys(user.getConfirmPassword());
         registrationButton.click();
         return new PersonalPage(driver);
     }
