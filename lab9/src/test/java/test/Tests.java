@@ -1,22 +1,22 @@
 package test;
 
+import driver.DriverSingleton;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import page.MainPage;
+import util.TestListener;
+
+@Listeners({TestListener.class})
 
 public class Tests {
     private WebDriver driver;
 
     @BeforeMethod()
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-
-        driver = new ChromeDriver();
-
-        driver.manage().window().maximize();
+        driver = DriverSingleton.getDriver();
     }
 
     @Test
@@ -48,6 +48,6 @@ public class Tests {
 
     @AfterMethod(alwaysRun = true)
     public void stopBrowser() {
-        driver.quit();
+        DriverSingleton.closeDriver();
     }
 }
