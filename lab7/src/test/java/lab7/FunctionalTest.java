@@ -1,5 +1,6 @@
 package lab7;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FunctionalTest {
@@ -16,7 +16,7 @@ public class FunctionalTest {
 
 	@Before
 	public void setUp() {
-		System.setProperty("webdriver.chrome.driver","/usr/local/bin/chromedriver");
+		System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
 
 		driver = new ChromeDriver();
 
@@ -44,14 +44,21 @@ public class FunctionalTest {
 			}
 		};
 
-		Wait<WebDriver> wait = new WebDriverWait(driver, 5);
+		new WebDriverWait(driver, 5).until(expectation);
 
-		try {
-			wait.until(expectation);
-		} catch (Throwable e) {
-			Assert.fail(e.getMessage());
-		}
+		driver.navigate().to("https://mile.by/personal/private");
 
+		WebElement accountFullName = driver.findElement(By.cssSelector("input[name='FIO']"));
+		WebElement accountEmail = driver.findElement(By.cssSelector("input[name='EMAIL']"));
+
+		Assert.assertEquals(accountFullName.getAttribute("value"), "Мальчикова");
+		Assert.assertEquals(accountEmail.getAttribute("value"), "xenia-2001@mail.ru");
+
+		driver.quit();
+	}
+
+	@After
+	public void stopBrowser() {
 		driver.quit();
 	}
 }
