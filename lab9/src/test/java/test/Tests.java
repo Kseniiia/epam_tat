@@ -7,6 +7,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import page.CatalogPage;
 import page.MainPage;
 import service.UserCreator;
@@ -53,10 +56,16 @@ public class Tests {
 
     @Test
     public void testAddToCart() {
-        new CatalogPage(driver)
+        String catalogArticleNumber = "1448341";
+
+        String cartArticleNumber = new CatalogPage(driver)
                 .openPage()
-                .addToCart("1448341")
-                .redirectToCart();
+                .addToCart(catalogArticleNumber)
+                .redirectToCart()
+                .waitForLoad()
+                .getFirstItemArticleNumber();
+
+        assertThat(catalogArticleNumber, is(equalTo(cartArticleNumber)));
     }
 
     @AfterMethod(alwaysRun = true)
