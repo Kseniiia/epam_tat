@@ -1,6 +1,7 @@
 package page;
 
 
+import model.User;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -54,9 +55,9 @@ public class MainPage extends AbstractPage {
         return this;
     }
 
-    public PersonalPage login(String login, String password) {
-        loginInput.sendKeys(login);
-        passwordInput.sendKeys(password);
+    public PersonalPage login(User user) {
+        loginInput.sendKeys(user.getUsername());
+        passwordInput.sendKeys(user.getPassword());
         loginButton.click();
         return new PersonalPage(driver);
     }

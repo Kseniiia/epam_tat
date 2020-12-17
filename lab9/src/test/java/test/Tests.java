@@ -1,16 +1,18 @@
 package test;
 
 import driver.DriverSingleton;
+import model.User;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import page.CatalogPage;
 import page.MainPage;
+import service.UserCreator;
 import util.TestListener;
 
 @Listeners({TestListener.class})
-
 public class Tests {
     private WebDriver driver;
 
@@ -21,10 +23,11 @@ public class Tests {
 
     @Test
     public void testLogin() {
+        User user = UserCreator.withCredentialsFromProperty();
         new MainPage(driver)
                 .openPage()
                 .openLoginForm()
-                .login("xenia-2001@mail.ru", "12344321q")
+                .login(user)
                 .waitForLoad();
     }
 
@@ -44,6 +47,13 @@ public class Tests {
                 .waitForLoad()
                 .register("Ivanov Ivan", "abcd@test.com", "123123q", "123123q")
                 .waitForLoad();
+    }
+
+    @Test
+    public void testAddToCart() {
+        new CatalogPage(driver)
+                .openPage()
+                .addToCart();
     }
 
     @AfterMethod(alwaysRun = true)

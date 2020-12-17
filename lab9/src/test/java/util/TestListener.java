@@ -42,6 +42,7 @@ public class TestListener implements ITestListener {
 
     public void onStart(ITestContext iTestContext) {
         System.setProperty("browser", "chrome");
+        System.setProperty("environment", "testdata");
     }
 
     public void onFinish(ITestContext iTestContext) {

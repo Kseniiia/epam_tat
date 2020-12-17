@@ -35,13 +35,13 @@ public class RegistrationPage extends AbstractPage {
         return this;
     }
 
-    public RegistrationPage register(String name, String email, String password, String confirmPassword) {
+    public PersonalPage register(String name, String email, String password, String confirmPassword) {
         inputName.sendKeys(name);
         inputEmail.sendKeys(email);
         inputPassword.sendKeys(password);
         inputConfirmPassword.sendKeys(confirmPassword);
         registrationButton.click();
-        return this;
+        return new PersonalPage(driver);
     }
 
     public RegistrationPage waitForLoad() {
