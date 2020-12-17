@@ -18,13 +18,17 @@ public class PersonalPage extends AbstractPage {
         return this;
     }
 
-    public void waitForLoad() {
+    public PersonalAccountPage account() {
+        return new PersonalAccountPage(driver);
+    }
+
+    public PersonalPage waitForLoad() {
         ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
                 return driver.getCurrentUrl().equals(PAGE_URL);
             }
         };
-
         new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(expectation);
+        return this;
     }
 }

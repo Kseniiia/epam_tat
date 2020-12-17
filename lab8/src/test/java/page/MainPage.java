@@ -1,6 +1,5 @@
 package page;
 
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -35,6 +34,9 @@ public class MainPage extends AbstractPage {
 
     private final By subscriptionPopupLocator = By.xpath("//div[contains(@class, 'add-subscription-form-popup')]");
 
+    @FindBy(xpath = "//div[contains(@class, 'add-subscription-form-popup')]/div")
+    private WebElement subscriptionPopupTitle;
+
     public MainPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(this.driver, this);
@@ -65,8 +67,10 @@ public class MainPage extends AbstractPage {
         return this;
     }
 
-    public void waitForSuccessfullSubscriptionPopup() {
+    public String getSubscriptionPopupTitle() {
         new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.visibilityOfElementLocated(subscriptionPopupLocator));
+
+        return subscriptionPopupTitle.getText();
     }
 }

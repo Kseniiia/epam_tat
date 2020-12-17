@@ -1,11 +1,13 @@
 package test;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import page.MainPage;
+import page.PersonalAccountPage;
 
 public class Tests {
     private WebDriver driver;
@@ -21,19 +23,26 @@ public class Tests {
 
     @Test
     public void testLogin() {
-        new MainPage(driver)
+        PersonalAccountPage accountPage = new MainPage(driver)
                 .openPage()
                 .openLoginForm()
                 .login("xenia-2001@mail.ru", "12344321q")
-                .waitForLoad();
+                .waitForLoad()
+                .account()
+                .openPage();
+
+        Assert.assertEquals(accountPage.getFullName(), "Мальчикова");
+        Assert.assertEquals(accountPage.getEmail(), "xenia-2001@mail.ru");
     }
 
     @Test
     public void testSubscribe() {
-        new MainPage(driver)
+        String result = new MainPage(driver)
                 .openPage()
-                .subscribe("abcd1@mail.ru")
-                .waitForSuccessfullSubscriptionPopup();
+                .subscribe("abcd-10@test.com")
+                .getSubscriptionPopupTitle();
+
+        Assert.assertEquals(result, "Подписка оформлена");
     }
 
     @After
