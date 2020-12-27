@@ -17,7 +17,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class Tests extends CommonConditions {
+public class UserTests extends CommonConditions {
     @Test
     public void testLogin() {
         User user = UserCreator.forLogin();
@@ -62,45 +62,5 @@ public class Tests extends CommonConditions {
 
         assertThat(accountPage.getFullName(), is(equalTo(user.getFullName())));
         assertThat(accountPage.getEmail(), is(equalTo(user.getEmail())));
-    }
-
-    @Test
-    public void testAddToCart() {
-        Item item = ItemCreator.forAddition();
-
-        Item cartItem = new CatalogPage(driver)
-                .openPage()
-                .addToCart(item)
-                .goToCart()
-                .waitForLoad()
-                .getFirstItem();
-
-        assertThat(cartItem, is(equalTo(item)));
-    }
-
-    @Test
-    public void testSearchItems() {
-        String query = SearchQueryCreator.fromProperty();
-
-        List<String> results = new CatalogPage(driver)
-                .openPage()
-                .searchItems(query)
-                .getSearchResults();
-
-        assertThat(results, Every.everyItem(containsStringIgnoringCase(query)));
-    }
-
-    @Test
-    public void testOpenTelegram() {
-        String expectedPageTitle = "Telegram: Contact @MileBy";
-        String expectedAction = "tg://resolve?domain=MileBy";
-
-        TelegramPage telegramPage = new MainPage(driver)
-                .openPage()
-                .goToTelegramPage()
-                .waitForLoad();
-
-        assertThat(telegramPage.getPageTitle(), is(equalTo(expectedPageTitle)));
-        assertThat(telegramPage.getAction(), is(equalTo(expectedAction)));
     }
 }

@@ -1,7 +1,5 @@
 package util;
 
-import driver.DriverSingleton;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,7 +47,8 @@ public class TestListener implements ITestListener {
 
     }
 
-    private void saveScreenshot(){
+    private void saveScreenshot() {
+        /*
         File screenCapture = ((TakesScreenshot) DriverSingleton
                 .getDriver())
                 .getScreenshotAs(OutputType.FILE);
@@ -61,6 +60,7 @@ public class TestListener implements ITestListener {
         } catch (IOException e) {
             log.error("Failed to save screenshot: " + e.getLocalizedMessage());
         }
+        */
     }
 
     private String getCurrentTimeAsString(){

@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Mile.by Suite">
+    <test name="Parallel Tests" parallel="classes">
+        <classes>
+            <class name="test.ItemTests"/>
+            <class name="test.OtherTests"/>
+            <class name="test.UserTests"/>
+        </classes>
+    </test>
+</suite>
