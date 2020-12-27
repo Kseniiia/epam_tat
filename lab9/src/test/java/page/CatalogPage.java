@@ -37,6 +37,12 @@ public class CatalogPage extends AbstractPage {
     @FindAll(@FindBy(xpath = "//div[2]/div[1]/form/div[3]/div/div/div[2]/a[1]/div/p[1]"))
     private List<WebElement> foundItems;
 
+    @FindBy(xpath = "//div[contains(@class, 'page-content-wrap container-wrap')]/h1")
+    private WebElement headingText;
+
+    @FindBy(xpath = "//div[contains(@class, 'bread-crambs-wrap')]/span[4]")
+    private WebElement breadcrumbText;
+
     private final By searchResultsPopupLocator = By.xpath("//div[@class='pre-search']");
 
     public CatalogPage(WebDriver driver) {
@@ -86,6 +92,14 @@ public class CatalogPage extends AbstractPage {
 
     public String getPageTitle() {
         return driver.getTitle();
+    }
+
+    public String getHeadingText() {
+        return headingText.getText();
+    }
+
+    public String getBreadcrumbText() {
+        return breadcrumbText.getText();
     }
 
     public ItemPage redirectToItemPage() {

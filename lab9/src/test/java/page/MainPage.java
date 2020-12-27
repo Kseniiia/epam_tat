@@ -13,6 +13,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class MainPage extends AbstractPage {
     private final Logger logger = LogManager.getRootLogger();
     private final String PAGE_URL = "https://mile.by/";
@@ -41,8 +43,6 @@ public class MainPage extends AbstractPage {
     @FindBy(css = "[class='link-reg']")
     private WebElement registrationButton;
 
-    private final By subscriptionPopupLocator = By.xpath("//div[contains(@class, 'add-subscription-form-popup')]");
-
     @FindBy(xpath = "//div[contains(@class, 'add-subscription-form-popup')]/div")
     private WebElement subscriptionPopupTitle;
 
@@ -52,13 +52,20 @@ public class MainPage extends AbstractPage {
     @FindBy(xpath = "//div[@class='full-catalog-wrap']")
     private WebElement catalogButton;
 
-    private final By catalogPopupLocator = By.xpath("//div[@class='full-catalog-block']");
-
     @FindBy(xpath = "//div[@class='full-catalog-block']//div[@class='full-catalog-item'][3]")
     private WebElement catalogCategory;
 
     @FindBy(xpath = "//div[@class='full-catalog-block']//div[@class='full-catalog-item'][3]/div/a[1]")
     private WebElement catalogCategoryLink;
+
+    @FindBy(xpath = "//div[contains(@class, 'city-ip-popup')]//p[@class='dropdown-list-item-city ']")
+    private List<WebElement> cityPopupNames;
+
+    @FindBy(xpath = "//div[contains(@class, 'top-line')]/div[contains(@class, 'city-selection')]/p/span")
+    private WebElement cityName;
+
+    private final By subscriptionPopupLocator = By.xpath("//div[contains(@class, 'add-subscription-form-popup')]");
+    private final By catalogPopupLocator = By.xpath("//div[@class='full-catalog-block']");
 
     public MainPage(WebDriver driver) {
         super(driver);
@@ -135,5 +142,26 @@ public class MainPage extends AbstractPage {
         catalogCategoryLink.click();
 
         return new CatalogPage(driver);
+    }
+
+    public MainPage selectCity(String name) {
+        WebElement city = cityPopupNames
+                .stream()
+                .filter(element -> name.equals(element.getText().trim()))
+                .findAny()
+                .orElse(null);
+
+        city.click();
+        return this;
+    }
+
+    public String getCityName() {
+        return cityName.getText();
+    }
+
+    public MainPage waitForLoad() {
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.urlToBe(PAGE_URL));
+        logger.info("Main page is loaded.");
+        return this;
     }
 }

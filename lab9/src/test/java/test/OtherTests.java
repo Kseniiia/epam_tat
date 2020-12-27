@@ -29,6 +29,9 @@ public class OtherTests extends CommonConditions {
 
     @Test
     public void testOpenCatalog() {
+        String expectedPageTitle = "Техника для кухни купить в Минске в гипермаркете Mile";
+        String expectedText = "Техника для кухни";
+
         CatalogPage catalogPage = new MainPage(driver)
                 .openPage()
                 .closeCityPopup()
@@ -36,7 +39,9 @@ public class OtherTests extends CommonConditions {
                 .goToCatalog()
                 .waitForLoad();
 
-        //assertThat(catalogPage.getPageTitle(), startsWith(""));
+        assertThat(catalogPage.getPageTitle(), is(equalTo(expectedPageTitle)));
+        assertThat(catalogPage.getHeadingText(), is(equalTo(expectedText)));
+        assertThat(catalogPage.getBreadcrumbText(), is(equalTo(expectedText)));
     }
 
     @Test
@@ -52,5 +57,17 @@ public class OtherTests extends CommonConditions {
                 .getBuyQuicklyResult();
 
         assertThat(result, is(equalTo(expectedMessage)));
+    }
+
+    @Test
+    public void testSelectCity() {
+        String city = "Брест";
+
+        MainPage mainPage = new MainPage(driver)
+                .openPage()
+                .selectCity(city)
+                .waitForLoad();
+
+        assertThat(mainPage.getCityName(), is(equalTo(city)));
     }
 }
