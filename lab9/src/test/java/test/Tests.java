@@ -2,18 +2,20 @@ package test;
 
 import model.Item;
 import model.User;
+import org.hamcrest.core.Every;
 import org.testng.annotations.Test;
 import page.CatalogPage;
 import page.MainPage;
 import page.PersonalAccountPage;
+import page.TelegramPage;
 import service.ItemCreator;
+import service.SearchQueryCreator;
 import service.UserCreator;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class Tests extends CommonConditions {
     @Test
@@ -35,14 +37,14 @@ public class Tests extends CommonConditions {
     @Test
     public void testSubscribe() {
         User user = UserCreator.forSubscription();
-        String message = "Подписка оформлена";
+        String expectedMessage = "Подписка оформлена";
 
         String result = new MainPage(driver)
                 .openPage()
                 .subscribe(user)
                 .getSubscriptionPopupTitle();
 
-        assertThat(result, is(equalTo(message)));
+        assertThat(result, is(equalTo(expectedMessage)));
     }
 
     @Test
@@ -77,10 +79,28 @@ public class Tests extends CommonConditions {
     }
 
     @Test
-    public void testFindItem() {
-        boolean b = new CatalogPage(driver)
-                .openPage().inputItemName().findItem();
+    public void testSearchItems() {
+        String query = SearchQueryCreator.fromProperty();
 
-        assertThat(b, is(equalTo(true)));
+        List<String> results = new CatalogPage(driver)
+                .openPage()
+                .searchItems(query)
+                .getSearchResults();
+
+        assertThat(results, Every.everyItem(containsStringIgnoringCase(query)));
+    }
+
+    @Test
+    public void testOpenTelegram() {
+        String expectedPageTitle = "Telegram: Contact @MileBy";
+        String expectedAction = "tg://resolve?domain=MileBy";
+
+        TelegramPage telegramPage = new MainPage(driver)
+                .openPage()
+                .goToTelegramPage()
+                .waitForLoad();
+
+        assertThat(telegramPage.getPageTitle(), is(equalTo(expectedPageTitle)));
+        assertThat(telegramPage.getAction(), is(equalTo(expectedAction)));
     }
 }

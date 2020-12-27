@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CatalogPage extends AbstractPage {
     private final Logger logger = LogManager.getRootLogger();
@@ -35,7 +36,9 @@ public class CatalogPage extends AbstractPage {
     private WebElement redirectToItemPage;
 
     @FindAll(@FindBy(xpath = "//div[2]/div[1]/form/div[3]/div/div/div[2]/a[1]/div/p[1]"))
-    private List<WebElement> findItems;
+    private List<WebElement> foundItems;
+
+    private final By searchResultsPopupLocator = By.xpath("//div[@class='pre-search']");
 
     public CatalogPage(WebDriver driver) {
         super(driver);
@@ -65,17 +68,20 @@ public class CatalogPage extends AbstractPage {
         return new CartPage(driver);
     }
 
-    public CatalogPage inputItemName() {
+    public CatalogPage searchItems(String query) {
         closeCityPopupButton.click();
-        inputItemName.sendKeys("вытяжка");
+        inputItemName.sendKeys(query);
         return this;
     }
 
-    public boolean findItem() {
-        boolean allItemsContainSearchKey = findItems
+    public List<String> getSearchResults() {
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
+                .until(ExpectedConditions.visibilityOfElementLocated(searchResultsPopupLocator));
+        logger.info("Search results popup is shown.");
+        return foundItems
                 .stream()
-                .allMatch(item -> item.getText().toLowerCase().contains("вытяжка".toLowerCase()));
-        return allItemsContainSearchKey;
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
     }
 
     public ItemPage redirectToItemPage() {
@@ -87,13 +93,7 @@ public class CatalogPage extends AbstractPage {
     }
 
     public CatalogPage waitForLoad() {
-        ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                return driver.getCurrentUrl().equals(PAGE_URL);
-            }
-        };
-
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(expectation);
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.urlToBe(PAGE_URL));
         return this;
     }
 }

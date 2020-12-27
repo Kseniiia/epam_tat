@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CartPage extends AbstractPage {
@@ -42,12 +43,7 @@ public class CartPage extends AbstractPage {
     }
 
     public CartPage waitForLoad() {
-        ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                return driver.getCurrentUrl().equals(PAGE_URL);
-            }
-        };
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(expectation);
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.urlToBe(PAGE_URL));
         logger.info("Cart page is loaded.");
         return this;
     }

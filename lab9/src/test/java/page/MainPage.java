@@ -45,6 +45,9 @@ public class MainPage extends AbstractPage {
     @FindBy(xpath = "//div[contains(@class, 'add-subscription-form-popup')]/div")
     private WebElement subscriptionPopupTitle;
 
+    @FindBy(css = "[class='telegram']")
+    private WebElement telegramButton;
+
     public MainPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(this.driver, this);
@@ -89,5 +92,11 @@ public class MainPage extends AbstractPage {
                 .until(ExpectedConditions.visibilityOfElementLocated(subscriptionPopupLocator));
         logger.info("Subscription popup is shown.");
         return subscriptionPopupTitle.getText();
+    }
+
+    public TelegramPage goToTelegramPage() {
+        closeCityPopupButton.click();
+        telegramButton.click();
+        return new TelegramPage(driver);
     }
 }
