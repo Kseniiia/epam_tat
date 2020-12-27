@@ -1,18 +1,10 @@
 package test;
 
-import model.Item;
 import model.User;
-import org.hamcrest.core.Every;
 import org.testng.annotations.Test;
-import page.CatalogPage;
 import page.MainPage;
 import page.PersonalAccountPage;
-import page.TelegramPage;
-import service.ItemCreator;
-import service.SearchQueryCreator;
 import service.UserCreator;
-
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -24,6 +16,7 @@ public class UserTests extends CommonConditions {
 
         PersonalAccountPage accountPage = new MainPage(driver)
                 .openPage()
+                .closeCityPopup()
                 .showLoginForm()
                 .login(user)
                 .waitForLoad()
@@ -41,6 +34,7 @@ public class UserTests extends CommonConditions {
 
         String result = new MainPage(driver)
                 .openPage()
+                .closeCityPopup()
                 .subscribe(user)
                 .getSubscriptionPopupTitle();
 
@@ -53,6 +47,7 @@ public class UserTests extends CommonConditions {
 
         PersonalAccountPage accountPage = new MainPage(driver)
                 .openPage()
+                .closeCityPopup()
                 .goToRegistrationPage()
                 .waitForLoad()
                 .register(user)

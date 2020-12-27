@@ -9,7 +9,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -51,10 +50,12 @@ public class CatalogPage extends AbstractPage {
         return this;
     }
 
-    public CatalogPage addToCart(Item item) {
+    public CatalogPage closeCityPopup() {
         closeCityPopupButton.click();
+        return this;
+    }
 
-        By locator = By.xpath("//div[@class='anons-sku'][contains(text(), '" + item.getNumber() + "')]/parent::div//button[@class='element-atb']");
+    public CatalogPage addToCart(Item item) {By locator = By.xpath("//div[@class='anons-sku'][contains(text(), '" + item.getNumber() + "')]/parent::div//button[@class='element-atb']");
         WebElement addToCartButton = driver.findElement(locator);
 
         addToCartButton.click();
@@ -69,7 +70,6 @@ public class CatalogPage extends AbstractPage {
     }
 
     public CatalogPage searchItems(String query) {
-        closeCityPopupButton.click();
         inputItemName.sendKeys(query);
         return this;
     }
@@ -82,6 +82,10 @@ public class CatalogPage extends AbstractPage {
                 .stream()
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
+    }
+
+    public String getPageTitle() {
+        return driver.getTitle();
     }
 
     public ItemPage redirectToItemPage() {

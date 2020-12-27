@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -48,6 +49,17 @@ public class MainPage extends AbstractPage {
     @FindBy(css = "[class='telegram']")
     private WebElement telegramButton;
 
+    @FindBy(xpath = "//div[@class='full-catalog-wrap']")
+    private WebElement catalogButton;
+
+    private final By catalogPopupLocator = By.xpath("//div[@class='full-catalog-block']");
+
+    @FindBy(xpath = "//div[@class='full-catalog-block']//div[@class='full-catalog-item'][3]")
+    private WebElement catalogCategory;
+
+    @FindBy(xpath = "//div[@class='full-catalog-block']//div[@class='full-catalog-item'][3]/div/a[1]")
+    private WebElement catalogCategoryLink;
+
     public MainPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(this.driver, this);
@@ -56,13 +68,20 @@ public class MainPage extends AbstractPage {
     public MainPage openPage() {
         driver.navigate().to(PAGE_URL);
         logger.info("Main page is opened.");
+
+        return this;
+    }
+
+    public MainPage closeCityPopup() {
+        closeCityPopupButton.click();
+
         return this;
     }
 
     public MainPage showLoginForm() {
-        closeCityPopupButton.click();
         loginOrRegisterButton.click();
         logger.info("Login form is shown.");
+
         return this;
     }
 
@@ -70,20 +89,21 @@ public class MainPage extends AbstractPage {
         loginInput.sendKeys(user.getEmail());
         passwordInput.sendKeys(user.getPassword());
         loginButton.click();
+
         return new PersonalPage(driver);
     }
 
     public MainPage subscribe(User user) {
-        closeCityPopupButton.click();
         subscriptionEmailInput.sendKeys(user.getEmail());
         subscriptionButton.click();
+
         return this;
     }
 
     public RegistrationPage goToRegistrationPage() {
-        closeCityPopupButton.click();
         loginOrRegisterButton.click();
         registrationButton.click();
+
         return new RegistrationPage(driver);
     }
 
@@ -91,12 +111,29 @@ public class MainPage extends AbstractPage {
         new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.visibilityOfElementLocated(subscriptionPopupLocator));
         logger.info("Subscription popup is shown.");
+
         return subscriptionPopupTitle.getText();
     }
 
     public TelegramPage goToTelegramPage() {
-        closeCityPopupButton.click();
         telegramButton.click();
+
         return new TelegramPage(driver);
+    }
+
+    public MainPage showCatalogs() {
+        catalogButton.click();
+
+        return this;
+    }
+
+    public CatalogPage goToCatalog() {
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.visibilityOfElementLocated(catalogPopupLocator));
+
+        Actions actions = new Actions(driver);
+        actions.moveToElement(catalogCategory).perform();
+        catalogCategoryLink.click();
+
+        return new CatalogPage(driver);
     }
 }

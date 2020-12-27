@@ -1,16 +1,11 @@
 package test;
 
 import model.Item;
-import model.User;
 import org.hamcrest.core.Every;
 import org.testng.annotations.Test;
 import page.CatalogPage;
-import page.MainPage;
-import page.PersonalAccountPage;
-import page.TelegramPage;
 import service.ItemCreator;
 import service.SearchQueryCreator;
-import service.UserCreator;
 
 import java.util.List;
 
@@ -24,6 +19,7 @@ public class ItemTests extends CommonConditions {
 
         Item cartItem = new CatalogPage(driver)
                 .openPage()
+                .closeCityPopup()
                 .addToCart(item)
                 .goToCart()
                 .waitForLoad()
@@ -38,6 +34,7 @@ public class ItemTests extends CommonConditions {
 
         List<String> results = new CatalogPage(driver)
                 .openPage()
+                .closeCityPopup()
                 .searchItems(query)
                 .getSearchResults();
 

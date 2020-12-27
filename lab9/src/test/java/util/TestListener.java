@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -27,7 +28,8 @@ public class TestListener implements ITestListener {
     }
 
     public void onTestFailure(ITestResult iTestResult) {
-        saveScreenshot();
+        WebDriver driver = (WebDriver) iTestResult.getTestContext().getAttribute("driver");
+        saveScreenshot(driver);
     }
 
     public void onTestSkipped(ITestResult iTestResult) {
@@ -47,10 +49,8 @@ public class TestListener implements ITestListener {
 
     }
 
-    private void saveScreenshot() {
-        /*
-        File screenCapture = ((TakesScreenshot) DriverSingleton
-                .getDriver())
+    private void saveScreenshot(WebDriver driver){
+        File screenCapture = ((TakesScreenshot) driver)
                 .getScreenshotAs(OutputType.FILE);
         try {
             FileUtils.copyFile(screenCapture, new File(
@@ -60,7 +60,6 @@ public class TestListener implements ITestListener {
         } catch (IOException e) {
             log.error("Failed to save screenshot: " + e.getLocalizedMessage());
         }
-        */
     }
 
     private String getCurrentTimeAsString(){
