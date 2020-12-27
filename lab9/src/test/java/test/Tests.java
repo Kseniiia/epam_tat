@@ -1,75 +1,86 @@
 package test;
 
-import driver.DriverSingleton;
+import model.Item;
 import model.User;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import page.CatalogPage;
+import page.MainPage;
+import page.PersonalAccountPage;
+import service.ItemCreator;
+import service.UserCreator;
+
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import page.CatalogPage;
-import page.MainPage;
-import service.UserCreator;
-import util.TestListener;
 
-@Listeners({TestListener.class})
-public class Tests {
-    private WebDriver driver;
-
-    @BeforeMethod()
-    public void setUp() {
-        driver = DriverSingleton.getDriver();
-    }
-
+public class Tests extends CommonConditions {
     @Test
     public void testLogin() {
-        User user = UserCreator.withCredentialsFromProperty();
-        new MainPage(driver)
+        User user = UserCreator.forLogin();
+
+        PersonalAccountPage accountPage = new MainPage(driver)
                 .openPage()
-                .openLoginForm()
+                .showLoginForm()
                 .login(user)
-                .waitForLoad();
+                .waitForLoad()
+                .goToAccountPage()
+                .openPage();
+
+        assertThat(accountPage.getFullName(), is(equalTo(user.getFullName())));
+        assertThat(accountPage.getEmail(), is(equalTo(user.getEmail())));
     }
 
     @Test
     public void testSubscribe() {
-        User user = UserCreator.withEmail();
-        new MainPage(driver)
+        User user = UserCreator.forSubscription();
+        String message = "Подписка оформлена";
+
+        String result = new MainPage(driver)
                 .openPage()
                 .subscribe(user)
-                .waitForSuccessfullSubscriptionPopup();
+                .getSubscriptionPopupTitle();
+
+        assertThat(result, is(equalTo(message)));
     }
 
     @Test
     public void testRegister() {
-        User user = UserCreator.withFullName();
-        new MainPage(driver)
+        User user = UserCreator.forRegistration();
+
+        PersonalAccountPage accountPage = new MainPage(driver)
                 .openPage()
-                .redirectToRegistrationPage()
+                .goToRegistrationPage()
                 .waitForLoad()
                 .register(user)
-                .waitForLoad();
+                .waitForLoad()
+                .goToAccountPage()
+                .openPage();
+
+        assertThat(accountPage.getFullName(), is(equalTo(user.getFullName())));
+        assertThat(accountPage.getEmail(), is(equalTo(user.getEmail())));
     }
 
     @Test
     public void testAddToCart() {
-        String catalogArticleNumber = "1448341";
+        Item item = ItemCreator.forAddition();
 
-        String cartArticleNumber = new CatalogPage(driver)
+        Item cartItem = new CatalogPage(driver)
                 .openPage()
-                .addToCart(catalogArticleNumber)
-                .redirectToCart()
+                .addToCart(item)
+                .goToCart()
                 .waitForLoad()
-                .getFirstItemArticleNumber();
+                .getFirstItem();
 
-        assertThat(catalogArticleNumber, is(equalTo(cartArticleNumber)));
+        assertThat(cartItem, is(equalTo(item)));
     }
 
-    @AfterMethod(alwaysRun = true)
-    public void stopBrowser() {
-        DriverSingleton.closeDriver();
+    @Test
+    public void testFindItem() {
+        boolean b = new CatalogPage(driver)
+                .openPage().inputItemName().findItem();
+
+        assertThat(b, is(equalTo(true)));
     }
 }

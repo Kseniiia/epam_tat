@@ -1,6 +1,8 @@
 package page;
 
 import model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RegistrationPage extends AbstractPage {
+    private final Logger logger = LogManager.getRootLogger();
     private final String PAGE_URL = "https://mile.by/register/";
 
     @FindBy(css = "input[name='FIO']")
@@ -33,6 +36,7 @@ public class RegistrationPage extends AbstractPage {
 
     public RegistrationPage openPage() {
         driver.navigate().to(PAGE_URL);
+        logger.info("Registration page is opened.");
         return this;
     }
 
@@ -53,7 +57,7 @@ public class RegistrationPage extends AbstractPage {
         };
 
         new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(expectation);
-
+        logger.info("Registration page is loaded.");
         return this;
     }
 }

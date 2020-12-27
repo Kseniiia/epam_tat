@@ -3,35 +3,43 @@ package service;
 import model.User;
 
 public class UserCreator {
-    public static final String TESTDATA_USER_NAME = "testdata.user.name";
-    public static final String TESTDATA_USER_PASSWORD = "testdata.user.password";
-    public static final String TESTDATA_USER_EMAIL = "testdata.user.email";
-    public static final String TESTDATA_USER_FULLNAME = "testdata.user.fullName";
-    public static final String TESTDATA_USER_CONFIRM_PASSWORD = "testdata.user.confirmPassword";
+    public static final String USER_TO_LOG_IN_EMAIL = "testdata.userToLogIn.email";
+    public static final String USER_TO_LOG_IN_PASSWORD = "testdata.userToLogIn.password";
+    public static final String USER_TO_LOG_IN_FULL_NAME = "testdata.userToLogIn.fullName";
 
+    public static final String USER_TO_SUBSCRIBE_EMAIL = "testdata.userToSubscribe.email";
 
+    public static final String USER_TO_REGISTER_FULL_NAME = "testdata.userToRegister.fullName";
+    public static final String USER_TO_REGISTER_EMAIL = "testdata.userToRegister.email";
+    public static final String USER_TO_REGISTER_PASSWORD = "testdata.userToRegister.password";
+    public static final String USER_TO_REGISTER_CONFIRM_PASSWORD = "testdata.userToRegister.confirmPassword";
 
-    public static User withCredentialsFromProperty() {
-        return new User(TestDataReader.getTestData(TESTDATA_USER_NAME),
-                TestDataReader.getTestData(TESTDATA_USER_PASSWORD));
+    public static User forLogin() {
+        User user = new User();
+
+        user.setEmail(TestDataReader.getTestData(USER_TO_LOG_IN_EMAIL));
+        user.setPassword(TestDataReader.getTestData(USER_TO_LOG_IN_PASSWORD));
+        user.setFullName(TestDataReader.getTestData(USER_TO_LOG_IN_FULL_NAME));
+
+        return user;
     }
 
-    public static User withEmptyUsername() {
-        return new User("", TestDataReader.getTestData(TESTDATA_USER_PASSWORD));
+    public static User forSubscription() {
+        User user = new User();
+
+        user.setEmail(TestDataReader.getTestData(USER_TO_SUBSCRIBE_EMAIL));
+
+        return user;
     }
 
-    public static User withEmptyPassword() {
-        return new User(TestDataReader.getTestData(TESTDATA_USER_NAME), "");
-    }
+    public static User forRegistration() {
+        User user = new User();
 
-    public static User withEmail() {
-        return new User(TestDataReader.getTestData(TESTDATA_USER_EMAIL));
-    }
+        user.setFullName(TestDataReader.getTestData(USER_TO_REGISTER_FULL_NAME));
+        user.setEmail(TestDataReader.getTestData(USER_TO_REGISTER_EMAIL));
+        user.setPassword(TestDataReader.getTestData(USER_TO_REGISTER_PASSWORD));
+        user.setConfirmPassword(TestDataReader.getTestData(USER_TO_REGISTER_CONFIRM_PASSWORD));
 
-    public static User withFullName() {
-        return new User(TestDataReader.getTestData(TESTDATA_USER_FULLNAME),
-                TestDataReader.getTestData(TESTDATA_USER_EMAIL),
-                TestDataReader.getTestData(TESTDATA_USER_PASSWORD),
-                TestDataReader.getTestData(TESTDATA_USER_CONFIRM_PASSWORD));
+        return user;
     }
 }
