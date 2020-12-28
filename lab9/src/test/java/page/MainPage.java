@@ -5,6 +5,7 @@ import model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -159,9 +160,11 @@ public class MainPage extends AbstractPage {
         return cityName.getText();
     }
 
-    public MainPage waitForLoad() {
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.urlToBe(PAGE_URL));
-        logger.info("Main page is loaded.");
+    public MainPage waitForReload() {
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.stalenessOf(driver.findElement(catalogPopupLocator)));
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(
+                driver -> ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete"));
+        logger.info("Main page is reloaded.");
         return this;
     }
 }

@@ -66,7 +66,7 @@ public class OtherTests extends CommonConditions {
         MainPage mainPage = new MainPage(driver)
                 .openPage()
                 .selectCity(city)
-                .waitForLoad();
+                .waitForReload();
 
         assertThat(mainPage.getCityName(), is(equalTo(city)));
     }

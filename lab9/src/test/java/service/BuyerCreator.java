@@ -1,7 +1,6 @@
 package service;
 
 import model.Buyer;
-import model.User;
 
 public class BuyerCreator {
     public static final String BUY_QUICKLY_NAME = "testdata.buyQuickly.name";
