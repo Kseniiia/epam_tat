@@ -1,12 +1,9 @@
 package test;
 
-import model.Buyer;
 import org.testng.annotations.Test;
 import page.CatalogPage;
-import page.ItemPage;
 import page.MainPage;
 import page.TelegramPage;
-import service.BuyerCreator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -42,21 +39,6 @@ public class OtherTests extends CommonConditions {
         assertThat(catalogPage.getPageTitle(), is(equalTo(expectedPageTitle)));
         assertThat(catalogPage.getHeadingText(), is(equalTo(expectedText)));
         assertThat(catalogPage.getBreadcrumbText(), is(equalTo(expectedText)));
-    }
-
-    @Test
-    public void testBuyQuickly() {
-        Buyer buyer = BuyerCreator.forPurchase();
-        String expectedMessage = "Ваш заказ отправлен. Спасибо.";
-
-        String result = new ItemPage(driver)
-                .openPage()
-                .closeCityPopup()
-                .showQuickPurchaseForm()
-                .buyQuickly(buyer)
-                .getBuyQuicklyResult();
-
-        assertThat(result, is(equalTo(expectedMessage)));
     }
 
     @Test

@@ -1,9 +1,12 @@
 package test;
 
+import model.Buyer;
 import model.Item;
 import org.hamcrest.core.Every;
 import org.testng.annotations.Test;
 import page.CatalogPage;
+import page.ItemPage;
+import service.BuyerCreator;
 import service.ItemCreator;
 import service.SearchQueryCreator;
 
@@ -39,5 +42,20 @@ public class ItemTests extends CommonConditions {
                 .getSearchResults();
 
         assertThat(results, Every.everyItem(containsStringIgnoringCase(query)));
+    }
+
+    @Test
+    public void testBuyQuickly() {
+        Buyer buyer = BuyerCreator.forPurchase();
+        String expectedMessage = "Ваш заказ отправлен. Спасибо.";
+
+        String result = new ItemPage(driver)
+                .openPage()
+                .closeCityPopup()
+                .showQuickPurchaseForm()
+                .buyQuickly(buyer)
+                .getBuyQuicklyResult();
+
+        assertThat(result, is(equalTo(expectedMessage)));
     }
 }
